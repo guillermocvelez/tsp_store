@@ -5,15 +5,19 @@
       height: '250px',
       borderRadius: '16px 16px 0 0',
       backgroundSize: 'cover',
-    }"></div>
-    <!-- <img :src="props.product.imageUrl" alt=""> -->
+    }">
+      <div class="discount"> Ahorro de {{ discount.toFixed(2) }}</div>
+      <div class="badge">BLACK FRIDAY</div>
+    </div>
+
     <div class="product-data">
-      <p>{{  props.product.name }}</p>
-      <p>{{ props.product.price }}</p>
-      <p>{{  (props.product.price -  discount).toFixed(2) }} <span> -15%</span></p>
-      <p>{{  `⭐ ${props.product.rating || 0} (${props.product.reviews || 0}+)` }}</p>
+      <p class="product-name">{{  props.product.name }}</p>
+      <p class="product-price">{{ props.product.price }}</p>
+      <p class="product-discount">{{  (props.product.price -  discount).toFixed(2) }} <span> -15%</span></p>
+      <p class="product-rating">{{  `⭐ ${props.product.rating || 0} (${props.product.reviews || 0}+)` }}</p>
 
     </div>
+
   </div>
 </template>
 
@@ -34,18 +38,74 @@ const discount = ref(props.product.price * 0.15);
 
 <style scoped>
 .product-card {
+
   border-radius: 16px;
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
-  width: 25%;
+  
 }
 
-/* img {
-  height: 250px;
-  border-radius: 16px 16px 0 0;
-} */
+.img {
+  position: relative;
+}
 
 .product-data{
   padding: 8px;
+}
+
+.product-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.product-price {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-decoration:line-through;
+}
+
+.product-discount{
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: red;
+  margin-bottom: 8px;
+
+  span {
+    font-weight: 400;
+  }
+}
+
+
+.product-rating {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #6b6b6b;
+  margin-bottom: 8px;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #ff4a4a;
+  color: #fff;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 5px 8px;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+.discount {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #ff9800;
+  color: #fff;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 5px 8px;
+  border-radius: 5px;
 }
 </style>
 

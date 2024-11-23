@@ -24,6 +24,8 @@
       </div>
     </div>
 
+    <AppFilters />
+
     <div class="products-container">
       <Product
         v-for="product in products_json"
@@ -39,6 +41,7 @@
 
 <script setup lang="ts">
 import Product from './ProductCard.vue';
+import AppFilters from '@/components/AppFilters.vue';
 
 import { useProductStore } from '@/stores/productStore';
 //import { storeToRefs } from 'pinia';
@@ -109,7 +112,8 @@ a {
 }
 
 .products-container{
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 32px;
   justify-content: center;
   margin-top: 32px;
