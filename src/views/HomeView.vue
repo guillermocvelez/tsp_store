@@ -29,26 +29,51 @@
     </div>
 
     <div class="find_container">
-      <div class="auth_actions-container">
-        <button class="login-link">
+      <div class="auth_actions-container" v-if="!isAuth">
+        <button class="login-link" @click="toggleLoginModal">
           Iniciar sesión
         </button>
-        <button class="register-link">
+        <button class="register-link" @click="toggleRegisterModal">
           Registrarse
         </button>
+      </div>
+      <div class="user-info" v-else>
+        <p>Bienvenido, {{ user.name }}</p>
+
       </div>
       <img class="hero-img" src="@/assets/images/Hero.png" alt="hero-img">
     </div>
   </section>
+  <LoginModal v-if="showLoginModal" @close="toggleLoginModal"/>
+  <RegisterModal v-if="showRegisterModal" @close="toggleRegisterModal"/>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import LoginModal from "@/views/LoginModal.vue";
+import RegisterModal from '@/views/RegisterModal.vue';
+
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore';
+import { storeToRefs } from 'pinia';
 
 const router = useRouter();
 
+const authStore = useAuthStore();
+const { user,isAuth } = storeToRefs(authStore);
+
 const  goToProducts = () => {
   router.push({name: 'products'})
+}
+
+const showLoginModal = ref(false);
+const toggleLoginModal = () => {
+  showLoginModal.value = !showLoginModal.value;
+}
+
+const showRegisterModal = ref(false);
+const toggleRegisterModal = () => {
+  showRegisterModal.value = !showRegisterModal.value;
 }
 
 
@@ -64,7 +89,7 @@ const  goToProducts = () => {
 
 .cta-container {
   height: 100vh;
-  width: 80%;
+   width: 500px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -161,6 +186,17 @@ a {
     transition: all 0.3s ease;
     border: 1px solid white;
     cursor: pointer;
+  }
+}
+
+.user-info {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  padding: 16px;
+  p {
+    color: white;
+    font-weight: 500;
   }
 }
 

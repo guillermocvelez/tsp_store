@@ -2,62 +2,79 @@
   <section>
     <div class="products-header">
       <div>
-          <img src="@/assets/icons/headerIcon.svg" alt="header-icon">
-        </div>
-        <nav>
-          <ul>
-            <li>
-              <router-link :to="{name: 'about'}">Acerca de</router-link>
-            </li>
-            <li>
-              <router-link :to="{ name: 'products'}">Productos</router-link>
-            </li>
-          </ul>
-        </nav>
-        <div class="auth_actions-container">
-        <button class="login-link">
+        <img src="@/assets/icons/headerIcon.svg" alt="header-icon">
+      </div>
+      <nav>
+        <ul>
+          <li>
+            <router-link :to="{ name: 'about' }">Acerca de</router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'products' }">Productos</router-link>
+          </li>
+        </ul>
+      </nav>
+      <div class="auth_actions-container" v-if="!isAuth">
+        <button class="login-link" @click="toggleLoginModal">
           Iniciar sesión
         </button>
-        <button class="register-link">
+        <button class="register-link" @click="toggleRegisterModal">
           Registrarse
         </button>
+      </div>
+      <div class="user-info" v-else>
+        <p>Bienvenido, {{ user.name }}</p>
+
       </div>
     </div>
 
     <AppFilters />
 
     <div class="products-container">
-      <Product
-        v-for="product in products"
-        :key="product._id"
-        :product="product"
-      />
+      <Product v-for="product in products" :key="product._id" :product="product" />
 
     </div>
 
-
+    <LoginModal v-if="showLoginModal" @close="toggleLoginModal"/>
+    <RegisterModal v-if="showRegisterModal" @close="toggleRegisterModal"/>
   </section>
 </template>
 
 <script setup lang="ts">
 import Product from './ProductCard.vue';
 import AppFilters from '@/components/AppFilters.vue';
-
+import { useAuthStore } from '@/stores/authStore';
+import LoginModal from "@/views/LoginModal.vue";
+import RegisterModal from '@/views/RegisterModal.vue';
 import { useProductStore } from '@/stores/productStore';
 import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
 //import { ref } from 'vue';
 
 // import ProductData from '@/assets/proucts.json';
 // import { ref } from 'vue';
 //import type { Products } from '@/types/productTypes';
 
+const authStore = useAuthStore();
+const {isAuth,user}  = storeToRefs(authStore);
+
 const productsStore = useProductStore();
 productsStore.getProducts();
 const { products } = storeToRefs(productsStore);
 
 
+const showLoginModal = ref(false);
+const toggleLoginModal = () => {
+  showLoginModal.value = !showLoginModal.value;
+}
 
-// const products_json = ref<Products[]>(ProductData);
+const showRegisterModal = ref(false);
+const toggleRegisterModal = () => {
+  showRegisterModal.value = !showRegisterModal.value;
+}
+
+
+
 
 </script>
 
@@ -73,7 +90,7 @@ nav>ul {
   height: 100%;
   display: flex;
   justify-content: space-between;
-  gap:32px;
+  gap: 32px;
   align-items: center;
 }
 
@@ -82,7 +99,7 @@ a {
   font-weight: 500;
 }
 
-.auth_actions-container{
+.auth_actions-container {
   display: flex;
   justify-content: center;
   gap: 2rem;
@@ -100,6 +117,7 @@ a {
     border: 1px solid black;
     cursor: pointer;
   }
+
   .login-link {
     background-color: black;
     color: white;
@@ -114,12 +132,22 @@ a {
   }
 }
 
-.products-container{
+.products-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 32px;
   justify-content: center;
   margin-top: 32px;
 }
-</style>
 
+.user-info {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  padding: 16px;
+  p {
+    color: black;
+    font-weight: 500;
+  }
+}
+</style>
