@@ -32,7 +32,17 @@ export const
       } catch (error) {
         console.error(error)
       }
-    }
+    },
+
+    async logout() {
+      try {
+        this.user = {} as User;
+        this.isAuth = false;
+        localStorage.clear();
+      } catch (error) {
+        console.error(error)
+      }
+    },
 
   },
  })

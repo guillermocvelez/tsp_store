@@ -24,6 +24,9 @@
       </div>
       <div class="user-info" v-else>
         <p>Bienvenido, {{ user.name }}</p>
+        <img src="@/assets/icons/logout-svgrepo-com_black.svg" alt="logout-img" @click="logout">
+
+
 
       </div>
     </div>
@@ -49,11 +52,6 @@ import RegisterModal from '@/views/RegisterModal.vue';
 import { useProductStore } from '@/stores/productStore';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
-//import { ref } from 'vue';
-
-// import ProductData from '@/assets/proucts.json';
-// import { ref } from 'vue';
-//import type { Products } from '@/types/productTypes';
 
 const authStore = useAuthStore();
 const {isAuth,user}  = storeToRefs(authStore);
@@ -72,6 +70,13 @@ const showRegisterModal = ref(false);
 const toggleRegisterModal = () => {
   showRegisterModal.value = !showRegisterModal.value;
 }
+
+const logout = () => {
+  authStore.logout();
+  router.push({name: 'home'});
+}
+
+
 
 
 
@@ -144,10 +149,16 @@ a {
   display: flex;
   width: 100%;
   justify-content: flex-end;
+  align-items: center;
   padding: 16px;
+  gap: 16px;
   p {
     color: black;
     font-weight: 500;
+  }
+  img {
+    cursor: pointer;
+    height: 20px;
   }
 }
 </style>

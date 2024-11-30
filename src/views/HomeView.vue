@@ -40,6 +40,10 @@
       <div class="user-info" v-else>
         <p>Bienvenido, {{ user.name }}</p>
 
+
+          <img src="@/assets/icons/logout-svgrepo-com.svg" alt="logout-img" @click="logout">
+
+
       </div>
       <img class="hero-img" src="@/assets/images/Hero.png" alt="hero-img">
     </div>
@@ -76,6 +80,10 @@ const toggleRegisterModal = () => {
   showRegisterModal.value = !showRegisterModal.value;
 }
 
+const logout = () => {
+  authStore.logout();
+  router.push({name: 'home'});
+}
 
 </script>
 
@@ -193,10 +201,17 @@ a {
   display: flex;
   width: 100%;
   justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
   padding: 16px;
   p {
     color: white;
     font-weight: 500;
+  }
+
+  img {
+    cursor: pointer;
+    height: 20px;
   }
 }
 
