@@ -21,14 +21,22 @@ import { defineConfig } from 'vite';
     <!-- Filtro de precio -->
     <div class="input-container">
         <label for="priceRange">Rango de precio:</label>
-        <input type="range" id="priceRange" min="0" max="50000" step="1">
-        <span id="priceValue">$0 - $50000</span>
+        <input
+          v-model="priceRange"
+          type="range"
+          id="priceRange"
+          min="0"
+          max="50"
+          step=".5"
+          @input="filterByPriceRange"
+        >
+        <span id="priceValue">${{  priceRange }}</span>
       </div>
       <!-- Filtro de categoría -->
       <div class="input-container">
         <label for="category">Categoría:</label>
-        <select id="category">
-          <option value="">Todas</option>
+        <select id="category" @input="filterByCategory">
+          <option value="all">Todas</option>
           <option value="Camisetas">Camisetas</option>
           <option value="Básicas">Básicas</option>
           <option value="Pantalones">Pantalones</option>
@@ -37,7 +45,7 @@ import { defineConfig } from 'vite';
       <!-- Filtro de calificación -->
       <div class="input-container">
         <label for="rating">Calificación mínima:</label>
-        <select id="rating">
+        <select id="rating" @input="filterByRating">
           <option value="0">Sin filtro</option>
           <option value="1">1 estrella</option>
           <option value="2">2 estrellas</option>
@@ -51,7 +59,7 @@ import { defineConfig } from 'vite';
 
 <script setup lang="ts">
 import { useProductStore } from '@/stores/productStore';
-import { storeToRefs } from 'pinia';
+// import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
 const productStore = useProductStore();
@@ -60,13 +68,37 @@ const productStore = useProductStore();
 
 
 const showFilters = ref(false);
-const toggleShowFilters = () => showFilters.value = !showFilters.value;
+const toggleShowFilters = () => {
+  showFilters.value = !showFilters.value;
+  productStore.resetFilters();
+
+};
+
+const priceRange = ref(0);
 
 const orderProductsBy = (event: Event) => {
   const select = event.target as HTMLSelectElement;
   if( select.value === 'price-asc') return productStore.orderProductsAsc()
   if( select.value === 'price-desc') return productStore.orderProductsDesc()
   if( select.value === 'rating') return productStore.orderProductsByRating()
+}
+
+const filterByPriceRange = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  priceRange.value = parseInt(input.value);
+  productStore.filterProductsByPrice( priceRange.value);
+}
+
+const filterByCategory = (event: Event) => {
+  const select = event.target as HTMLSelectElement;
+  if( select.value === 'todas') return productStore.resetFilters();
+  productStore.filterProductsByCategory(select.value);
+}
+
+const filterByRating = (event: Event) => {
+  const select = event.target as HTMLSelectElement;
+
+  productStore.filterProductsByRating(parseInt(select.value));
 }
 </script>
 

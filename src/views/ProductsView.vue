@@ -45,7 +45,7 @@ import AppFilters from '@/components/AppFilters.vue';
 
 import { useProductStore } from '@/stores/productStore';
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+//import { ref } from 'vue';
 
 // import ProductData from '@/assets/proucts.json';
 // import { ref } from 'vue';
