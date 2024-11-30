@@ -9,7 +9,7 @@ import { defineConfig } from 'vite';
     <div>
       <div class="input-container">
         <label for="">Ordenar por:</label>
-        <select name="" id="">
+        <select @input="orderProductsBy">
           <option value="price-asc">Precio: Menor a mayor</option>
           <option value="price-desc">Precio: Mayor a menor</option>
           <option value="rating">Mejor calificación</option>
@@ -50,12 +50,24 @@ import { defineConfig } from 'vite';
 </template>
 
 <script setup lang="ts">
+import { useProductStore } from '@/stores/productStore';
+import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
+
+const productStore = useProductStore();
+//const { products } = storeToRefs (productStore);
 
 
 
 const showFilters = ref(false);
 const toggleShowFilters = () => showFilters.value = !showFilters.value;
+
+const orderProductsBy = (event: Event) => {
+  const select = event.target as HTMLSelectElement;
+  if( select.value === 'price-asc') return productStore.orderProductsAsc()
+  if( select.value === 'price-desc') return productStore.orderProductsDesc()
+  if( select.value === 'rating') return productStore.orderProductsByRating()
+}
 </script>
 
 <style scoped>

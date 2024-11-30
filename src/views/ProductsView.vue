@@ -28,7 +28,7 @@
 
     <div class="products-container">
       <Product
-        v-for="product in products_json"
+        v-for="product in products"
         :key="product._id"
         :product="product"
       />
@@ -44,17 +44,20 @@ import Product from './ProductCard.vue';
 import AppFilters from '@/components/AppFilters.vue';
 
 import { useProductStore } from '@/stores/productStore';
-//import { storeToRefs } from 'pinia';
-
-import ProductData from '@/assets/proucts.json';
+import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
-import type { Products } from '@/types/productTypes';
+
+// import ProductData from '@/assets/proucts.json';
+// import { ref } from 'vue';
+//import type { Products } from '@/types/productTypes';
 
 const productsStore = useProductStore();
 productsStore.getProducts();
-//const { products } = storeToRefs(productsStore);
+const { products } = storeToRefs(productsStore);
 
-const products_json = ref<Products[]>(ProductData);
+
+
+// const products_json = ref<Products[]>(ProductData);
 
 </script>
 
